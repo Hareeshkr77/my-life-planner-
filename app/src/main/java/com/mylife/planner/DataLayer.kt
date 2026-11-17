@@ -298,6 +298,7 @@ object DataPortabilityManager {
                 require(dbFile.exists()) { "Database file not found" }
                 context.contentResolver.openOutputStream(destinationUri)?.use { out ->
                     dbFile.inputStream().use { input -> input.copyTo(out) }
+                    Unit
                 } ?: error("Unable to open backup destination")
             }
         }
@@ -311,6 +312,7 @@ object DataPortabilityManager {
                 File("${dbFile.path}-shm").delete()
                 context.contentResolver.openInputStream(sourceUri)?.use { input ->
                     dbFile.outputStream().use { out -> input.copyTo(out) }
+                    Unit
                 } ?: error("Unable to open backup file")
             }
         }
