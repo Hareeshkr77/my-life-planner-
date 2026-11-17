@@ -1,9 +1,6 @@
 package com.mylife.planner
 
 import android.Manifest
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -26,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowLeft
@@ -41,12 +39,14 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -81,6 +81,45 @@ class ThemePreferences(context: Context) {
     }
 }
 
+private val ExpressiveShapes = Shapes(
+    extraSmall = RoundedCornerShape(10.dp),
+    small = RoundedCornerShape(14.dp),
+    medium = RoundedCornerShape(20.dp),
+    large = RoundedCornerShape(26.dp),
+    extraLarge = RoundedCornerShape(32.dp)
+)
+
+private val ExpressiveTypography = Typography(
+    headlineMedium = TextStyle(fontSize = 28.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.5).sp),
+    titleLarge = TextStyle(fontSize = 22.sp, fontWeight = FontWeight.Bold, letterSpacing = (-0.2).sp),
+    titleMedium = TextStyle(fontSize = 17.sp, fontWeight = FontWeight.SemiBold),
+    labelLarge = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.SemiBold)
+)
+
+private val ExpressiveLightColors = lightColorScheme(
+    primary = Color(0xFF006B5E),
+    onPrimary = Color.White,
+    primaryContainer = Color(0xFF6FF7E0),
+    onPrimaryContainer = Color(0xFF00201B),
+    secondary = Color(0xFF4A635D),
+    secondaryContainer = Color(0xFFCDE8E0),
+    tertiary = Color(0xFF8B4A60),
+    tertiaryContainer = Color(0xFFFFD9E2),
+    surfaceVariant = Color(0xFFDBE5E1)
+)
+
+private val ExpressiveDarkColors = darkColorScheme(
+    primary = Color(0xFF4EDBC4),
+    onPrimary = Color(0xFF003730),
+    primaryContainer = Color(0xFF005046),
+    onPrimaryContainer = Color(0xFF6FF7E0),
+    secondary = Color(0xFFB1CCC4),
+    secondaryContainer = Color(0xFF334B45),
+    tertiary = Color(0xFFFFB1C8),
+    tertiaryContainer = Color(0xFF6F3348),
+    surfaceVariant = Color(0xFF3F4946)
+)
+
 @Composable
 fun MyLifePlannerTheme(themeMode: ThemeMode, content: @Composable () -> Unit) {
     val dark = when (themeMode) {
@@ -92,10 +131,14 @@ fun MyLifePlannerTheme(themeMode: ThemeMode, content: @Composable () -> Unit) {
         val ctx = LocalContext.current
         if (dark) dynamicDarkColorScheme(ctx) else dynamicLightColorScheme(ctx)
     } else {
-        if (dark) darkColorScheme(primary = Color(0xFF53DBC9))
-        else lightColorScheme(primary = Color(0xFF006A60))
+        if (dark) ExpressiveDarkColors else ExpressiveLightColors
     }
-    MaterialTheme(colorScheme = colors, content = content)
+    MaterialTheme(
+        colorScheme = colors,
+        shapes = ExpressiveShapes,
+        typography = ExpressiveTypography,
+        content = content
+    )
 }
 
 enum class Screen(val route: String, val label: String, val icon: ImageVector) {
